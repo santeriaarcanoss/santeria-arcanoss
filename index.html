@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Santeria Arcanoss · Astrología, Tarot y Espiritismo · Santiago Jara</title>
+<meta name="description" content="Carta natal, tránsitos, tarot y trabajos espirituales desde la luz. Presencial en Rafael Castillo, La Matanza, y online a todo el mundo. Horóscopo diario y carta del día.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#130a0f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Santeria Arcanoss · Santiago Jara">
+<meta property="og:description" content="Astrología, tarot y espiritismo. Tu horóscopo diario, la carta del día y reservas por WhatsApp.">
+<meta property="og:image" content="compartir.jpg">
+<meta property="og:locale" content="es_AR">
+<style>body{margin:0}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: noche de vela. Hero con tirada de tarot interactiva, buscador "¿qué necesitás?", servicios con botón directo a WhatsApp, barra fija en celular. Look oscuro único y deliberado. */
+:root{
+  color-scheme:dark;
+  --bg:#130a0f; --bg2:#1d1017; --card:#24141c; --line:#3d2530;
+  --ink:#f6ece4; --muted:#c3aeb3; --gold:#ecb95f; --gold-deep:#b9852f; --ember:#e2775a; --lilac:#c7a7e8;
+  --display:"Gloock","Playfair Display",Georgia,serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;padding-inline:18px;overflow-x:hidden}
+.wrap{max-width:1100px;margin:0 auto;overflow-x:clip;overflow-y:visible}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.05;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:999px;font:700 16px/1 var(--body);text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.btn-wa{background:var(--gold);color:#22130a;box-shadow:0 10px 30px -10px rgba(236,185,95,.6)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--gold)}
+.btn svg{width:20px;height:20px;flex:none}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;padding-block:18px;gap:12px}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.02em;display:flex;align-items:center;gap:12px}
+.logo img{width:48px;height:48px;border-radius:50%;box-shadow:0 0 0 1px var(--gold-deep),0 6px 20px -8px rgba(236,185,95,.5)}
+.final .seal{width:110px;height:110px;border-radius:50%;box-shadow:0 0 40px -6px rgba(236,185,95,.45)}
+/* horóscopo diario */
+.zod{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:18px}
+.zb{display:grid;justify-items:center;gap:2px;padding:12px 6px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font:600 14px var(--body);min-width:0}
+.zb .zg{font-size:24px;color:var(--gold);line-height:1.1}
+.zb small{font-size:11.5px;color:var(--muted);font-weight:500}
+.zb:hover{border-color:var(--gold-deep)}
+.zb[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#22130a}
+.zb[aria-pressed="true"] .zg,.zb[aria-pressed="true"] small{color:#22130a}
+.zb:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.horo{display:grid;grid-template-columns:240px 1fr;gap:28px;background:linear-gradient(150deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:24px;padding:28px}
+.h-id{display:grid;align-content:start;justify-items:center;text-align:center;gap:6px;border-right:1px solid var(--line);padding-right:24px}
+.h-id .big{font-size:72px;line-height:1;color:var(--gold)}
+.h-id h3{font-size:32px}
+.h-id .dates{font-size:13px;color:var(--muted)}
+.h-id .today{font-size:13px;color:var(--muted);margin-top:8px}
+.energy{display:flex;gap:4px;margin-top:10px;color:var(--gold);font-size:18px;letter-spacing:2px}
+.energy i{font-style:normal;opacity:.25}.energy i.on{opacity:1}
+.elabel{font-weight:700;font-size:14px}
+.h-body{display:grid;gap:16px;align-content:start;min-width:0}
+.h-body .lead2{font-family:var(--display);font-size:clamp(21px,2.6vw,26px);line-height:1.3}
+.h-row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.h-row .k{font:700 11.5px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding-top:4px;min-width:84px}
+.h-row p{color:var(--muted);font-size:15.5px}
+.h-row.hl p{color:var(--ink)}
+.h-own{border-left:3px solid var(--gold);padding-left:14px;font-family:var(--display);font-size:19px}
+.h-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.h-cta .btn{padding:12px 20px;font-size:15px}
+@media (max-width:860px){.zod{grid-template-columns:repeat(4,1fr)}.horo{grid-template-columns:1fr;padding:22px}.h-id{border-right:0;border-bottom:1px solid var(--line);padding:0 0 18px}}
+@media (max-width:420px){.zod{grid-template-columns:repeat(3,1fr)}.h-row{grid-template-columns:1fr;gap:2px}}
+.logo b{color:var(--gold);font-weight:400}
+.top nav{display:flex;gap:18px;font-size:14px;font-weight:600}
+.top nav a{text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--gold)}
+/* barra fija + menú */
+html{scroll-padding-top:86px}
+.wrap{padding-top:74px}
+.top{position:fixed;top:0;left:0;right:0;padding-inline:max(18px,calc((100% - 1100px)/2));z-index:30;background:transparent;border-bottom:1px solid transparent;transition:border-color .2s,background .2s;padding-block:12px}
+.top.scrolled{border-bottom-color:var(--line);background:rgba(19,10,15,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.top .logo{text-decoration:none}
+.top nav a{padding:6px 2px;border-bottom:2px solid transparent}
+.top nav a.on{color:var(--gold);border-bottom-color:var(--gold)}
+.top-r{display:flex;align-items:center;gap:18px}
+.menubtn{display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--gold-deep);border-radius:999px;padding:9px 16px;font:700 14.5px var(--body);cursor:pointer}
+.menubtn:hover{border-color:var(--gold)}
+.menubtn:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.menubtn .bars{display:grid;gap:3px}.menubtn .bars i{display:block;width:16px;height:2px;background:var(--gold);border-radius:2px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;color:var(--ink);transition:border-color .2s,transform .2s;min-width:0}
+.tile:hover{border-color:var(--gold-deep);transform:translateY(-2px)}
+.tile:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.tile .ti{grid-row:span 2;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:21px;color:var(--gold);border:1px solid var(--gold-deep);background:var(--bg2)}
+.tile b{font-size:15.5px;line-height:1.2}
+.tile small{color:var(--muted);font-size:13px;line-height:1.3}
+#atajos{padding-block:0 56px}
+#atajos .eyebrow{margin-bottom:14px}
+.menu{position:absolute;top:calc(100% + 8px);right:max(12px,calc((100% - 1100px)/2));width:min(760px,calc(100% - 24px));max-height:min(82vh,780px);overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--bg);color:var(--ink);box-shadow:0 30px 80px -20px #000,0 0 0 100vmax rgba(8,4,6,.6);z-index:40}
+.menu-in{padding:22px;display:grid;gap:18px}
+.menu-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.menu-head .logo{font-size:20px}
+.xbtn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:22px;cursor:pointer;line-height:1}
+.xbtn:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.menu .tiles{grid-template-columns:repeat(2,1fr)}
+.menu .btn{width:100%}
+.totop{position:fixed;right:18px;bottom:22px;z-index:25;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--gold-deep);background:var(--card);color:var(--gold);font-size:20px;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .2s,transform .2s;box-shadow:0 10px 24px -10px #000}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+@media (max-width:1060px){.top nav{display:none}}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,1fr)}.totop{bottom:88px}.top .logo{font-size:19px}.top .logo img{width:40px;height:40px}}
+@media (max-width:420px){.tile{grid-template-columns:1fr;justify-items:start;padding:14px}.tile .ti{grid-row:auto;width:38px;height:38px;font-size:18px}.menu .tiles{gap:8px}.menubtn span:last-child{display:none}.menubtn{padding:11px 13px}}
+
+/* hero */
+.hero{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;padding-block:40px 64px}
+.glow{position:absolute;inset:-80px -200px auto auto;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(236,185,95,.22),rgba(226,119,90,.08) 45%,transparent 70%);pointer-events:none;z-index:0}
+.hero > :not(.glow){position:relative;z-index:1;min-width:0}
+.hero h1{font-size:clamp(48px,8.5vw,96px);margin-block:14px 18px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--gold);display:block}
+.hero .lead{font-size:18.5px;color:var(--muted);max-width:40ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chip{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);color:var(--muted)}
+
+/* tirada */
+.draw{display:grid;justify-items:center;gap:18px}
+.deck{display:flex;justify-content:center;align-items:flex-end;height:300px;width:100%;max-width:420px}
+.tcard{width:150px;aspect-ratio:2/3.3;border-radius:14px;border:0;padding:0;cursor:pointer;perspective:900px;background:none;margin-inline:-14px;transition:transform .35s ease}
+.tcard:nth-child(1){transform:rotate(-12deg) translateY(14px)}
+.tcard:nth-child(3){transform:rotate(12deg) translateY(14px)}
+.tcard:hover{transform:translateY(-14px) rotate(0)!important;z-index:2}
+.tcard:focus-visible{outline:3px solid var(--lilac);outline-offset:4px}
+.inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.tcard.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:grid;place-items:center;overflow:hidden}
+.back{background:
+  radial-gradient(circle at 50% 50%,transparent 26%,rgba(236,185,95,.9) 26.5%,transparent 27.5%),
+  radial-gradient(circle at 50% 50%,transparent 40%,rgba(236,185,95,.45) 40.5%,transparent 41.5%),
+  repeating-linear-gradient(45deg,rgba(236,185,95,.09) 0 2px,transparent 2px 12px),
+  linear-gradient(160deg,#3a1a28,#1d0e15);
+  border:1.5px solid var(--gold-deep);box-shadow:0 20px 40px -18px #000}
+.back::after{content:"\2726";color:var(--gold);font-size:28px}
+.front{transform:rotateY(180deg);background:linear-gradient(170deg,#fbf1e2,#efd9b8);color:#2a1610;border:6px solid #fbf1e2;outline:1.5px solid var(--gold-deep);outline-offset:-10px;grid-template-rows:auto 1fr auto;padding:14px 8px;text-align:center}
+.front .num{font-family:var(--display);font-size:18px;color:#8a5a1c}
+.front .sym{font-size:54px;line-height:1;color:#8d3b2b}
+.front .nm{font-family:var(--display);font-size:16px;line-height:1.1}
+.reading{min-height:118px;max-width:420px;text-align:center;display:grid;gap:10px;justify-items:center}
+.reading h3{font-size:26px;color:var(--gold)}
+.reading p{color:var(--muted);font-size:15.5px}
+.reading .small{font-size:13px;color:var(--muted)}
+.linkbtn{background:none;border:0;color:var(--gold);font:700 14px var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* clima */
+.climate{display:grid;grid-template-columns:auto 1fr auto;gap:18px 28px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:22px 26px}
+.moon{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff4dd,#e8c98c 60%,#b9852f);box-shadow:0 0 30px rgba(236,185,95,.35)}
+.climate h3{font-size:24px}
+.climate p{color:var(--muted);font-size:15px;margin-top:4px}
+
+section{padding-block:80px 0}
+.head{display:grid;gap:12px;max-width:62ch;margin-bottom:30px}
+.head h2{font-size:clamp(34px,5vw,54px)}
+.head p{color:var(--muted);font-size:17px}
+
+/* necesidad */
+.needs{display:flex;flex-wrap:wrap;gap:10px}
+.need{font:700 15.5px var(--body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);padding:13px 20px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.need span{color:var(--gold)}
+.need[aria-pressed="true"]{background:var(--gold);color:#22130a;border-color:var(--gold)}
+.need[aria-pressed="true"] span{color:#22130a}
+.need:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.answer{margin-top:20px;background:linear-gradient(135deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:20px;padding:26px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.answer h3{font-size:26px;margin-bottom:6px}
+.answer p{color:var(--muted)}
+.answer .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.answer .tags span{font-size:13px;font-weight:600;color:var(--gold);border:1px solid var(--gold-deep);border-radius:999px;padding:4px 10px}
+
+/* servicios */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tab{font:700 14.5px var(--body);background:transparent;color:var(--muted);border:1.5px solid var(--line);border-radius:999px;padding:10px 18px;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--gold);background:var(--card)}
+.tab:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:16px}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0;transition:border-color .2s, transform .2s}
+.svc:hover{border-color:var(--gold-deep);transform:translateY(-3px)}
+.svc .ic{font-size:26px;color:var(--gold);line-height:1}
+.svc h3{font-size:24px}
+.svc p{color:var(--muted);font-size:15px;flex:1}
+.svc .mode{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lilac)}
+.svc .btn{padding:12px 18px;font-size:15px;width:100%}
+
+/* ética */
+.ethic{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;max-width:820px}
+.ethic .mark{font-family:var(--display);font-size:80px;line-height:.8;color:var(--gold)}
+.ethic p{font-family:var(--display);font-size:clamp(24px,3.4vw,34px);line-height:1.25}
+.ethic small{display:block;margin-top:14px;color:var(--muted);font-size:14px;font-family:var(--body)}
+
+/* pasos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;padding:0;margin:0}
+.steps li{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:8px;min-width:0}
+.steps b{font-family:var(--display);font-weight:400;font-size:44px;color:var(--gold);line-height:1}
+.steps h3{font-size:22px}
+.steps p{color:var(--muted);font-size:15px}
+.where{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.where div{border:1px dashed var(--line);border-radius:18px;padding:22px}
+.where h3{font-size:22px;margin-bottom:6px}
+.where p{color:var(--muted);font-size:15px}
+
+/* faq */
+details{border-bottom:1px solid var(--line);padding-block:18px;max-width:760px}
+summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-size:22px;line-height:1}
+details[open] summary::after{content:"\2212"}
+details p{margin-top:10px;color:var(--muted)}
+
+/* cierre */
+.final{margin-top:90px;border-radius:28px;padding:48px 32px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(236,185,95,.25),transparent 60%),var(--bg2);border:1px solid var(--line);display:grid;gap:18px;justify-items:center}
+.final h2{font-size:clamp(34px,5.5vw,58px);max-width:16ch}
+.final p{color:var(--muted);max-width:46ch}
+.final .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.final .num{font-size:15px;color:var(--muted)}
+.final .num b{color:var(--ink);user-select:all}
+footer{padding-block:40px 110px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+
+/* cielo de hoy */
+.sky{background:var(--bg2);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;gap:22px}
+.sky-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.sky-head h2{font-size:clamp(28px,4vw,40px);margin-top:8px}
+.sky-note{font-size:13px;color:var(--muted)}
+.sky-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.sky-moon,.sky-season{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+.sky-moon{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.sky-moon h3,.sky-season h3{font-size:23px;margin-bottom:6px}
+.sky-moon p,.sky-season p{color:var(--muted);font-size:15px}
+.moonball{position:relative;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff6e3,#e9cd93 65%,#c09146);overflow:hidden;box-shadow:0 0 34px rgba(236,185,95,.3)}
+.shade{position:absolute;inset:0;border-radius:50%;background:#140a10;opacity:.92}
+.retros{display:grid;gap:10px}
+.retro{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;border-left:3px solid var(--ember);padding:6px 0 6px 16px}
+.retro b{font-family:var(--display);font-weight:400;font-size:21px;display:block}
+.retro span{color:var(--muted);font-size:15px}
+.retro .rx{font:700 12px var(--body);color:var(--ember);border:1px solid var(--ember);border-radius:6px;padding:3px 7px;margin-top:4px}
+.retro.calm{border-color:var(--gold)}
+.planets{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.pl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;min-width:0}
+.pl .g{font-size:20px;color:var(--gold);line-height:1.2}
+.pl .n{font-size:12px;color:var(--muted)}
+.pl .s{font-weight:700;font-size:14px}
+.pl .d{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pl.r{border-color:var(--ember)}
+.pl.r .d::after{content:" R";color:var(--ember);font-weight:700}
+.month-msg{background:linear-gradient(135deg,rgba(236,185,95,.12),transparent);border:1px solid var(--gold-deep);border-radius:18px;padding:20px;display:grid;gap:8px}
+.month-msg p{font-family:var(--display);font-size:clamp(19px,2.4vw,23px);line-height:1.35}
+.sky-cta{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.sky-cta p{color:var(--muted);max-width:46ch}
+/* sobre mí */
+.marks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:16px}
+.markc{display:grid;grid-template-columns:auto 1fr;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
+.markc .glyph{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:26px;color:var(--gold);border:1px solid var(--gold-deep)}
+.markc h3{font-size:21px;margin-bottom:6px}
+.markc p{color:var(--muted);font-size:15px}
+.marks-cta{margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+.marks-cta p{font-size:18px}
+@media (max-width:860px){.sky-grid{grid-template-columns:1fr}.planets{grid-template-columns:repeat(4,1fr)}.sky{padding:20px}}
+@media (max-width:420px){.planets{grid-template-columns:repeat(3,1fr)}.sky-moon{grid-template-columns:1fr;justify-items:center;text-align:center}}
+/* barra celular */
+.sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(19,10,15,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:none;z-index:20}
+.sticky .btn{width:100%}
+
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:20px;text-align:center}
+  .hero .lead{margin-inline:auto}
+  .hero .ctas,.trust{justify-content:center}
+  .top nav{display:none}
+  .steps,.where{grid-template-columns:1fr}
+  .answer{grid-template-columns:1fr}
+  .climate{grid-template-columns:auto 1fr}
+  .climate .btn{grid-column:1/-1}
+  .sticky{display:block}
+  .glow{right:-260px;top:-160px}
+}
+@media (max-width:420px){
+  .tcard{width:116px}
+  .deck{height:240px}
+  .front .sym{font-size:40px}
+  .ethic{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:no-preference){.glow{animation:flicker 6s ease-in-out infinite}@keyframes flicker{0%,100%{opacity:1}45%{opacity:.82}55%{opacity:.95}}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <a class="logo" href="#inicio" aria-label="Volver al inicio"><img src="logo.webp" alt="" width="48" height="48">Santeria <b>Arcanoss</b></a>
+    <div class="top-r">
+      <nav aria-label="Secciones" id="nav">
+        <a href="#cielo">Cielo de hoy</a><a href="#signos">Tu signo</a><a href="#necesidad">¿Qué necesitás?</a><a href="#servicios">Servicios</a><a href="#reservar">Reservar</a>
+      </nav>
+      <button class="menubtn" type="button" id="openMenu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span>Menú</span></button>
+    </div>
+  <div class="menu" id="menu" role="region" aria-label="Menú" hidden>
+  <div class="menu-in">
+    <div class="menu-head">
+      <div class="logo"><img src="logo.webp" alt="" width="40" height="40" style="width:40px;height:40px">Santeria <b>Arcanoss</b></div>
+      <button class="xbtn" type="button" id="closeMenu" aria-label="Cerrar menú">&times;</button>
+    </div>
+    <div class="tiles" data-tiles></div>
+    <a class="btn btn-wa wa" data-msg="Hola Santiago, vengo de la página de Santeria Arcanoss y quiero reservar una consulta." href="#reservar">Escribir por WhatsApp</a>
+  </div>
+</div>
+  </div>
+
+  <header class="hero" id="inicio">
+    <div class="glow" aria-hidden="true"></div>
+    <div>
+      <div class="eyebrow">Astrología · Tarot · Espiritismo</div>
+      <h1>Santeria <em>Arcanoss</em></h1>
+      <p class="lead">Soy Santiago Jara: astrólogo, tarotista y espiritista. A través de tu carta natal, el tarot y los trabajos espirituales te muestro qué estás viviendo hoy, para que puedas abrir tu camino en el amor, el trabajo o lo material.</p>
+      <div class="ctas">
+        <a class="btn btn-wa wa" data-msg="Hola Santiago, vengo de la página de Santeria Arcanoss y quiero reservar una consulta." href="#reservar"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3z"/></svg>Reservar por WhatsApp</a>
+        <a class="btn btn-ghost" href="#necesidad">¿Qué necesito?</a>
+      </div>
+      <div class="trust">
+        <span class="chip">Presencial en Rafael Castillo</span>
+        <span class="chip">Online a todo el mundo</span>
+        <span class="chip">Siempre desde la luz</span>
+      </div>
+    </div>
+
+    <div class="draw" id="carta">
+      <div class="eyebrow">Tu carta del día · tocá una</div>
+      <div class="deck" id="deck">
+        <button class="tcard" aria-label="Elegir carta 1"><div class="inner"><div class="face back"></div><div class="face front"></div></div></button>
+        <button class="tcard" aria-label="Elegir carta 2"><div class="inner"><div class="face back"></div><div class="face front"></div></div></button>
+        <button class="tcard" aria-label="Elegir carta 3"><div class="inner"><div class="face back"></div><div class="face front"></div></div></button>
+      </div>
+      <div class="reading" id="reading" aria-live="polite">
+        <p>Concentrate en tu pregunta y elegí la carta que te llame.</p>
+      </div>
+    </div>
+  </header>
+
+  <section id="atajos" aria-label="Ir directo a">
+    <div class="eyebrow">Ir directo a</div>
+    <div class="tiles" data-tiles></div>
+  </section>
+
+  <section id="cielo" style="padding-top:0">
+    <div class="sky">
+      <div class="sky-head">
+        <div>
+          <div class="eyebrow">El cielo de hoy</div>
+          <h2 id="skyDate">Clima astral</h2>
+        </div>
+        <p class="sky-note">Se calcula solo cada vez que entrás</p>
+      </div>
+      <div class="sky-grid">
+        <div class="sky-moon">
+          <div class="moonball" id="moonball" aria-hidden="true"><div class="shade" id="shade"></div></div>
+          <div>
+            <h3 id="moonName">Luna</h3>
+            <p id="moonText">Cargando el cielo de hoy…</p>
+          </div>
+        </div>
+        <div class="sky-season">
+          <h3 id="seasonName">Temporada</h3>
+          <p id="seasonText"></p>
+        </div>
+      </div>
+      <div class="retros" id="retros"></div>
+      <div class="planets" id="planets" aria-label="Posición de los planetas hoy"></div>
+      <div class="month-msg" id="monthMsg" hidden>
+        <div class="eyebrow">Mensaje del mes · Santiago</div>
+        <p id="monthText"></p>
+      </div>
+      <div class="sky-cta">
+        <p>Esto es lo que pasa en el cielo para todos. Lo importante es qué toca en tu carta.</p>
+        <a class="btn btn-wa wa" data-msg="Hola Santiago, vi el cielo de hoy en tu página y quiero saber cómo me afectan mis tránsitos." href="#reservar">¿Cómo te afecta a vos?</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="signos">
+    <div class="head">
+      <div class="eyebrow">Horóscopo diario</div>
+      <h2>Tu signo hoy</h2>
+      <p>Elegí tu signo. El mensaje se arma solo cada día con la posición real de la Luna y los planetas.</p>
+    </div>
+    <div class="zod" id="zod" role="group" aria-label="Elegí tu signo"></div>
+    <article class="horo" id="horo" aria-live="polite">
+      <div class="h-id">
+        <div class="big" id="hGlyph"></div>
+        <h3 id="hName"></h3>
+        <div class="dates" id="hDates"></div>
+        <div class="energy" id="hEnergy" aria-hidden="true"></div>
+        <div class="elabel" id="hELabel"></div>
+        <div class="today" id="hToday"></div>
+      </div>
+      <div class="h-body">
+        <p class="lead2" id="hLead"></p>
+        <p class="h-own" id="hOwn" hidden></p>
+        <div class="h-row"><span class="k">Clima</span><p id="hTone"></p></div>
+        <div class="h-row hl" id="hPlanRow" hidden><span class="k">En tu signo</span><p id="hPlan"></p></div>
+        <div class="h-row"><span class="k">Consejo</span><p id="hTip"></p></div>
+        <div class="h-row"><span class="k">Color</span><p id="hColor"></p></div>
+        <div class="h-row"><span class="k">Para hoy</span><p id="hRitual"></p></div>
+        <div class="h-cta">
+          <a class="btn btn-wa wa" id="hWa" href="#reservar">Quiero mi lectura</a>
+          <a class="btn btn-ghost" id="hShare" target="_blank" rel="noopener" href="#">Compartir por WhatsApp</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="sobre-mi">
+    <div class="head">
+      <div class="eyebrow">Sobre mí</div>
+      <h2>Lo que dice mi carta</h2>
+      <p>Antes de leer el cielo de otros aprendí a leer el mío. Mi carta natal explica por qué hago lo que hago.</p>
+    </div>
+    <div class="marks">
+      <article class="markc"><div class="glyph">&#9737;&#xFE0E;</div><div><h3>Sol en Sagitario junto a Plutón</h3><p>Nací con el Sol pegado a Plutón, el planeta de lo oculto y la transformación. Por eso no me quedo en la superficie: voy al fondo de lo que te pasa, sin vueltas.</p></div></article>
+      <article class="markc"><div class="glyph">&#9796;&#xFE0E;</div><div><h3>Saturno en Piscis, en la casa 8</h3><p>La casa 8 es la del más allá, lo oculto y los procesos profundos. Saturno ahí me dio una conexión seria con el mundo espiritual. No juego con esto: lo trabajo con respeto.</p></div></article>
+      <article class="markc"><div class="glyph">&#9795;&#xFE0E;</div><div><h3>Júpiter en Sagitario, en su propio signo</h3><p>Júpiter es el planeta de la fe y la buena fortuna, y en Sagitario está en su casa. Es la marca del que guía: mi trabajo es ayudarte a ver más lejos de lo que ves hoy.</p></div></article>
+      <article class="markc"><div class="glyph">&#9790;&#xFE0E;</div><div><h3>Luna en Acuario frente a mi Ascendente Leo</h3><p>Mi Luna está justo enfrente del Ascendente, en la casa de los vínculos. Siento lo que le pasa al otro. Cada consulta es un encuentro, no un trámite.</p></div></article>
+      <article class="markc"><div class="glyph">&#9798;&#xFE0E;</div><div><h3>Neptuno y Urano en la casa del servicio</h3><p>Mi forma de ayudar es intuitiva y distinta. Uno lo sagrado con lo actual: por eso atiendo en persona y también online, a cualquier país.</p></div></article>
+    </div>
+    <div class="marks-cta">
+      <p><strong>Todos tenemos marcas así en la carta.</strong> ¿Querés descubrir las tuyas?</p>
+      <a class="btn btn-wa wa" data-msg="Hola Santiago, leí tu carta en la página y quiero descubrir lo que dice la mía. Quiero una carta natal." href="#reservar">Quiero mi carta natal</a>
+    </div>
+  </section>
+
+  <section id="necesidad">
+    <div class="head">
+      <div class="eyebrow">Empezá por acá</div>
+      <h2>¿Qué necesitás hoy?</h2>
+      <p>Elegí lo que estás buscando y te digo qué trabajo te conviene.</p>
+    </div>
+    <div class="needs" role="group" aria-label="Elegí tu necesidad" id="needs"></div>
+    <div class="answer" id="answer"></div>
+  </section>
+
+  <section id="servicios">
+    <div class="head">
+      <div class="eyebrow">Servicios</div>
+      <h2>Todo lo que hago</h2>
+      <p>Valores a consultar. Cada trabajo se arma para tu situación.</p>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <div class="ethic">
+      <div class="mark" aria-hidden="true">&#10022;</div>
+      <p>Trabajo siempre desde la luz. No hago trabajos para dañar, atar ni perjudicar a nadie.
+        <small>Los trabajos espirituales acompañan tu proceso y no reemplazan la atención médica, psicológica ni legal.</small></p>
+    </div>
+  </section>
+
+  <section id="reservar">
+    <div class="head">
+      <div class="eyebrow">Reservar</div>
+      <h2>Tu turno en tres pasos</h2>
+    </div>
+    <ol class="steps">
+      <li><b>1</b><h3>Escribime</h3><p>Tocá cualquier botón de WhatsApp. El mensaje ya va escrito, solo lo enviás.</p></li>
+      <li><b>2</b><h3>Elegimos el día</h3><p>Te paso horarios y el valor. Si estás en otro país, coordinamos según tu hora.</p></li>
+      <li><b>3</b><h3>Confirmás con seña</h3><p>Transferencia o Mercado Pago en Argentina. Desde el exterior te paso los medios disponibles.</p></li>
+    </ol>
+    <div class="where">
+      <div><h3>Presencial</h3><p>En Rafael Castillo, La Matanza. La dirección exacta te la paso al confirmar.</p></div>
+      <div><h3>Online y a distancia</h3><p>Por videollamada desde cualquier país. Los trabajos espirituales también se hacen a distancia.</p></div>
+    </div>
+  </section>
+
+  <section id="preguntas">
+    <div class="head">
+      <div class="eyebrow">Preguntas frecuentes</div>
+      <h2>Lo que más me preguntan</h2>
+    </div>
+    <details><summary>¿Qué datos necesito para la carta natal?</summary><p>Fecha, hora y lugar de nacimiento. La hora es clave: si podés, buscala en tu partida de nacimiento.</p></details>
+    <details><summary>¿Atendés a personas de otros países?</summary><p>Sí. Hago consultas online y trabajos a distancia para personas de todo el mundo. Coordinamos el horario según tu país.</p></details>
+    <details><summary>¿Las consultas online sirven igual?</summary><p>Sí. La astrología y el tarot funcionan igual a distancia, y los trabajos espirituales también se pueden hacer a distancia.</p></details>
+    <details><summary>¿Hacés trabajos para dañar o atar a alguien?</summary><p>No. Trabajo siempre desde lo positivo: limpiar, proteger, abrir caminos y atraer. Nunca para perjudicar a nadie.</p></details>
+    <details><summary>¿Cómo se paga?</summary><p>En Argentina: transferencia, Mercado Pago o efectivo en la consulta presencial. Desde el exterior te paso los medios de pago. La seña confirma el turno.</p></details>
+  </section>
+
+  <div class="final">
+    <img class="seal" src="logo.webp" alt="Logo de Santeria Arcanoss" width="110" height="110">
+    <div class="eyebrow">Santeria Arcanoss</div>
+    <h2>Tu camino se puede abrir. Empecemos hoy.</h2>
+    <p>Escribime por WhatsApp y te respondo personalmente. Seguime en Instagram para ver tiradas, tránsitos y trabajos.</p>
+    <div class="ctas">
+      <a class="btn btn-wa wa" data-msg="Hola Santiago, vengo de la página de Santeria Arcanoss y quiero reservar una consulta." href="#reservar">Escribir por WhatsApp</a>
+      <a class="btn btn-ghost" href="https://www.instagram.com/santeriaarcanoss" target="_blank" rel="noopener">@santeriaarcanoss</a>
+      <a class="btn btn-ghost" href="https://www.instagram.com/santiagojara.tarot" target="_blank" rel="noopener">@santiagojara.tarot</a>
+    </div>
+    <div class="num">WhatsApp: <b>+54 9 11 2751-5179</b></div>
+  </div>
+
+  <footer><span>© 2026 Santeria Arcanoss · Santiago Jara</span><span>Astrología · Tarot · Espiritismo · Rafael Castillo, La Matanza</span></footer>
+</div>
+
+<button class="totop" type="button" id="toTop" aria-label="Volver arriba">&#8593;</button>
+
+<div class="sticky"><a class="btn btn-wa wa" data-msg="Hola Santiago, vengo de la página de Santeria Arcanoss y quiero reservar una consulta." href="#reservar">Reservar por WhatsApp</a></div>
+
+<script>
+const WA="5491127515179";
+const vs=s=>s+"︎";
+function waLink(msg){return "https://wa.me/"+WA+"?text="+encodeURIComponent(msg)}
+function wire(root){root.querySelectorAll("a.wa").forEach(a=>{a.href=waLink(a.dataset.msg);a.target="_blank";a.rel="noopener"})}
+
+/* servicios */
+const S=[
+ {g:"astro",ic:"☉",n:"Carta natal",d:"Tu mapa al nacer: personalidad, emociones, amor, vocación y lo que venís a aprender.",m:"Presencial u online"},
+ {g:"astro",ic:"☿",n:"Tránsitos",d:"Qué está moviendo el cielo hoy en tu vida y qué se viene, con fechas clave.",m:"Presencial u online"},
+ {g:"astro",ic:"☀",n:"Revolución solar",d:"Tu año personal de cumpleaños a cumpleaños: oportunidades, cuidados y momentos fuertes.",m:"Presencial u online"},
+ {g:"tarot",ic:"✦",n:"Lectura de tarot",d:"Respuestas claras sobre amor, trabajo, dinero o una decisión que tenés que tomar.",m:"Presencial u online"},
+ {g:"esp",ic:"♨",n:"Limpieza energética",d:"Para personas, hogares y negocios cargados, con malas rachas o estancados.",m:"Presencial o a distancia"},
+ {g:"esp",ic:"→",n:"Abre caminos",d:"Para destrabar lo que no avanza: trabajo, proyectos, amor o trámites.",m:"Presencial o a distancia"},
+ {g:"esp",ic:"✂",n:"Corte de brujería",d:"Si sentís que algo te bloquea o que te mandaron un mal, lo vemos y lo cortamos.",m:"Presencial o a distancia"},
+ {g:"esp",ic:"☾",n:"Trabajo de cabeza",d:"Para despejar la mente, ordenar los pensamientos y recuperar la calma.",m:"Presencial"},
+ {g:"esp",ic:"★",n:"Ofrendas para lo material",d:"Para pedir prosperidad, trabajo y abundancia, preparadas para tu situación.",m:"Presencial o a distancia"},
+];
+const G=[["todo","Todo"],["astro","Astrología"],["tarot","Tarot"],["esp","Trabajos espirituales"]];
+const tabs=document.getElementById("tabs"),grid=document.getElementById("grid");
+function showGroup(k){
+  tabs.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.k===k));
+  grid.textContent="";
+  S.filter(s=>k==="todo"||s.g===k).forEach(s=>{
+    const el=document.createElement("article");el.className="svc";
+    el.innerHTML='<div class="ic"></div><h3></h3><p></p><div class="mode"></div><a class="btn btn-wa wa" href="#reservar">Quiero este</a>';
+    el.querySelector(".ic").textContent=vs(s.ic);el.querySelector("h3").textContent=s.n;el.querySelector("p").textContent=s.d;el.querySelector(".mode").textContent=s.m;
+    el.querySelector("a").dataset.msg="Hola Santiago, vengo de la página y quiero consultar por: "+s.n+".";
+    grid.appendChild(el);
+  });
+  wire(grid);
+}
+G.forEach(([k,l])=>{const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.dataset.k=k;b.textContent=l;b.onclick=()=>showGroup(k);tabs.appendChild(b)});
+showGroup("todo");
+
+/* necesidades */
+const N=[
+ {k:"Amor",i:"♡",t:"Para el amor",p:"Empezamos con una lectura de tarot para ver qué está pasando, y si hace falta un abre caminos para el amor.",s:["Tarot","Abre caminos","Carta natal"]},
+ {k:"Trabajo y dinero",i:"★",t:"Para el trabajo y el dinero",p:"Una ofrenda para lo material y un abre caminos ayudan a mover lo económico. Los tránsitos te dicen cuándo actuar.",s:["Ofrendas para lo material","Abre caminos","Tránsitos"]},
+ {k:"Protección",i:"✦",t:"Para protegerte",p:"Si sentís envidia, malas rachas o que te hicieron algo, primero vemos qué hay y después limpiamos y cortamos.",s:["Corte de brujería","Limpieza energética"]},
+ {k:"Destrabar",i:"→",t:"Para destrabar lo que no avanza",p:"Cuando todo se frena, una limpieza seguida de un abre caminos despeja el camino.",s:["Limpieza energética","Abre caminos"]},
+ {k:"Claridad",i:"☾",t:"Para recuperar claridad",p:"Si tenés la cabeza cargada o no sabés qué decidir, un trabajo de cabeza y una tirada te ordenan.",s:["Trabajo de cabeza","Tarot"]},
+ {k:"Conocerme",i:"☉",t:"Para conocerte",p:"Tu carta natal muestra quién sos y hacia dónde vas. La revolución solar, cómo viene tu año.",s:["Carta natal","Revolución solar","Tránsitos"]},
+];
+const needs=document.getElementById("needs"),ans=document.getElementById("answer");
+function pick(i){
+  needs.querySelectorAll(".need").forEach((b,j)=>b.setAttribute("aria-pressed",i===j));
+  const n=N[i];ans.textContent="";
+  const d=document.createElement("div");d.innerHTML='<h3></h3><p></p><div class="tags"></div>';
+  d.querySelector("h3").textContent=n.t;d.querySelector("p").textContent=n.p;
+  n.s.forEach(x=>{const s=document.createElement("span");s.textContent=x;d.querySelector(".tags").appendChild(s)});
+  const a=document.createElement("a");a.className="btn btn-wa wa";a.href="#reservar";a.textContent="Consultar por WhatsApp";
+  a.dataset.msg="Hola Santiago, vengo de la página. Necesito ayuda con: "+n.k.toLowerCase()+". ¿Qué trabajo me recomendás?";
+  ans.append(d,a);wire(ans);
+}
+N.forEach((n,i)=>{const b=document.createElement("button");b.className="need";b.innerHTML="<span></span>";b.querySelector("span").textContent=vs(n.i);b.append(" "+n.k);b.onclick=()=>pick(i);needs.appendChild(b)});
+pick(0);
+
+/* tarot */
+const A=[
+ ["0","El Loco","✧","Animate a empezar algo nuevo. El salto que te da miedo es el que te abre el camino."],
+ ["I","El Mago","∞","Tenés todo lo que necesitás para lograrlo. Es momento de actuar con decisión."],
+ ["II","La Sacerdotisa","☾","Escuchá tu intuición. Lo que sentís por dentro ya sabe la respuesta."],
+ ["III","La Emperatriz","♀","Llega abundancia y creatividad. Cuidá lo que estás haciendo crecer."],
+ ["IV","El Emperador","♂","Poné orden y límites claros. La estructura te va a dar seguridad."],
+ ["V","El Hierofante","☩","Buscá consejo en alguien con experiencia. Un buen guía acorta el camino."],
+ ["VI","Los Enamorados","♡","Hay una elección importante en el amor o en tus valores. Elegí con el corazón."],
+ ["VII","El Carro","➤","Avanzás con fuerza. Mantené el rumbo y no te distraigas."],
+ ["VIII","La Fuerza","☘","Tu calma vale más que la pelea. Con paciencia dominás la situación."],
+ ["IX","El Ermitaño","✵","Tomate un tiempo para vos. En el silencio vas a encontrar la respuesta."],
+ ["X","La Rueda de la Fortuna","☸","La suerte está girando a tu favor. Aprovechá la oportunidad que llega."],
+ ["XI","La Justicia","⚖","Lo justo se acomoda. Actuá con claridad y la verdad sale a la luz."],
+ ["XII","El Colgado","☥","Mirá la situación desde otro lado. Esperar un poco también es avanzar."],
+ ["XIII","La Muerte","❦","Algo termina para que empiece algo mejor. Soltá lo que ya cumplió su ciclo."],
+ ["XIV","La Templanza","♒","Equilibrio y sanación. Las cosas se arreglan con calma y paciencia."],
+ ["XV","El Diablo","⛧","Mirá qué te tiene atado. Reconocerlo es el primer paso para liberarte."],
+ ["XVI","La Torre","⚡","Se cae lo que no era sólido. Después del sacudón viene la claridad."],
+ ["XVII","La Estrella","★","Esperanza y protección. Lo que pediste está en camino."],
+ ["XVIII","La Luna","☽","No todo es lo que parece. Confiá en tu intuición y no te apures."],
+ ["XIX","El Sol","☉","Alegría, éxito y claridad. Es un muy buen momento para vos."],
+ ["XX","El Juicio","♫","Llega un despertar. Es hora de responder al llamado que venís sintiendo."],
+ ["XXI","El Mundo","♁","Se cierra un ciclo con éxito. Lo que trabajaste da su fruto."],
+];
+const cards=[...document.querySelectorAll(".tcard")],rd=document.getElementById("reading");
+let drawn=false;
+cards.forEach(c=>c.onclick=()=>{
+  if(drawn)return;drawn=true;
+  const a=A[Math.floor(Math.random()*A.length)],f=c.querySelector(".front");
+  f.innerHTML='<div class="num"></div><div class="sym"></div><div class="nm"></div>';
+  f.querySelector(".num").textContent=a[0];f.querySelector(".sym").textContent=vs(a[2]);f.querySelector(".nm").textContent=a[1];
+  c.classList.add("flip");cards.forEach(o=>{if(o!==c)o.style.opacity=".35"});
+  setTimeout(()=>{
+    rd.innerHTML='<h3></h3><p></p><a class="btn btn-wa wa" href="#reservar">Quiero mi lectura completa</a><button class="linkbtn" type="button">Volver a tirar</button>';
+    rd.querySelector("h3").textContent=a[1];rd.querySelector("p").textContent=a[3];
+    rd.querySelector("a").dataset.msg="Hola Santiago, en tu página me salió "+a[1]+" como carta del día. Quiero una lectura de tarot completa.";
+    wire(rd);
+    rd.querySelector(".linkbtn").onclick=reset;
+  },matchMedia("(prefers-reduced-motion: reduce)").matches?0:650);
+});
+function reset(){drawn=false;cards.forEach(o=>{o.classList.remove("flip");o.style.opacity=""});rd.innerHTML='<p>Concentrate en tu pregunta y elegí la carta que te llame.</p>'}
+
+/* ===== Cielo automático ===== */
+// Mensaje del mes: escribí el texto y hasta qué fecha mostrarlo (AAAA-MM-DD). Después se oculta solo.
+const MENSAJE_DEL_MES={hasta:"2026-11-15",texto:"Con Venus retrógrada vuelven historias del pasado. Antes de decidir si das otra oportunidad, hacé una limpieza y consultá las cartas. Es un gran momento para cerrar lo que quedó abierto."};
+
+const SIGNOS=["Aries","Tauro","Géminis","Cáncer","Leo","Virgo","Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"];
+const TEMP=["arranques, coraje y ganas de empezar de cero.","estabilidad, dinero y disfrute. Buen momento para trabajos de prosperidad.","comunicación, trámites y movimiento. Se activan las conversaciones.","familia, hogar y emociones. Ideal para limpiar la casa energéticamente.","brillo, amor y creatividad. Animate a mostrarte.","orden, salud y rutina. Tiempo de limpiar lo que sobra.","vínculos, pareja y acuerdos. Se busca equilibrio.","intensidad, lo oculto y la transformación. Época fuerte para cortes y limpiezas.","fe, viajes y expansión. Se abren caminos.","metas, trabajo y estructura. Se siembra lo que viene.","libertad, amistades y cambios inesperados.","intuición, espiritualidad y cierre de ciclo. Ideal para el tarot."];
+const RETRO={Mercury:"Revisá contratos, mensajes y papeles. Vuelven conversaciones pendientes.",Venus:"Vuelven amores del pasado. Revisá qué querés en el amor y con el dinero.",Mars:"La energía va para adentro. Evitá peleas y no fuerces lo que no fluye.",Jupiter:"Momento de crecer por dentro antes de expandirte afuera.",Saturn:"Se revisan responsabilidades. Lo que está flojo pide refuerzo."};
+const PL=[["Sun","Sol","☉"],["Moon","Luna","☽"],["Mercury","Mercurio","☿"],["Venus","Venus","♀"],["Mars","Marte","♂"],["Jupiter","Júpiter","♃"],["Saturn","Saturno","♄"]];
+const EL={Earth:[1.00000261,0.00000562,0.01671123,-0.00004392,-0.00001531,-0.01294668,100.46457166,35999.37244981,102.93768193,0.32327364,0,0],
+Mercury:[0.38709927,0.00000037,0.20563593,0.00001906,7.00497902,-0.00594749,252.2503235,149472.67411175,77.45779628,0.16047689,48.33076593,-0.12534081],
+Venus:[0.72333566,0.0000039,0.00677672,-0.00004107,3.39467605,-0.0007889,181.9790995,58517.81538729,131.60246718,0.00268329,76.67984255,-0.27769418],
+Mars:[1.52371034,0.00001847,0.0933941,0.00007882,1.84969142,-0.00813131,-4.55343205,19140.30268499,-23.94362959,0.44441088,49.55953891,-0.29257343],
+Jupiter:[5.202887,-0.00011607,0.04838624,-0.00013253,1.30439695,-0.00183714,34.39644051,3034.74612775,14.72847983,0.21252668,100.47390909,0.20469106],
+Saturn:[9.53667594,-0.0012506,0.05386179,-0.00050991,2.48599187,0.00193609,49.95424423,1222.49362201,92.59887831,-0.41897216,113.66242448,-0.28867794]};
+const R=Math.PI/180,norm=x=>((x%360)+360)%360;
+const Tof=d=>(d.getTime()/864e5+2440587.5-2451545)/36525;
+function helio(n,T){const e=EL[n],a=e[0]+e[1]*T,ec=e[2]+e[3]*T,I=(e[4]+e[5]*T)*R,L=e[6]+e[7]*T,wp=e[8]+e[9]*T,Om=(e[10]+e[11]*T)*R,w=wp*R-Om;
+  const M=norm(L-wp)*R;let E=M;for(let i=0;i<20;i++)E=E+(M-(E-ec*Math.sin(E)))/(1-ec*Math.cos(E));
+  const x=a*(Math.cos(E)-ec),y=a*Math.sqrt(1-ec*ec)*Math.sin(E);
+  return [(Math.cos(w)*Math.cos(Om)-Math.sin(w)*Math.sin(Om)*Math.cos(I))*x+(-Math.sin(w)*Math.cos(Om)-Math.cos(w)*Math.sin(Om)*Math.cos(I))*y,
+          (Math.cos(w)*Math.sin(Om)+Math.sin(w)*Math.cos(Om)*Math.cos(I))*x+(-Math.sin(w)*Math.sin(Om)+Math.cos(w)*Math.cos(Om)*Math.cos(I))*y]}
+function moonLon(T){const t=(a,b)=>Math.sin(norm(a+b*T)*R);
+  return norm(218.32+481267.881*T+6.29*t(135,477198.87)-1.27*t(259.3,-413335.36)+0.66*t(235.7,890534.22)+0.21*t(269.9,954397.74)-0.19*t(357.5,35999.05)-0.11*t(186.5,966404.03))}
+function lon(n,d){const T=Tof(d);if(n==="Moon")return moonLon(T);const E=helio("Earth",T);let X,Y;
+  if(n==="Sun"){X=-E[0];Y=-E[1]}else{const P=helio(n,T);X=P[0]-E[0];Y=P[1]-E[1]}
+  return norm(Math.atan2(Y,X)/R+1.396971*T)}
+const speed=(n,d)=>((lon(n,new Date(+d+864e5))-lon(n,d)+540)%360)-180;
+function stationDate(n,d){for(let k=1;k<300;k++){const t=new Date(+d+k*864e5);if(speed(n,t)>0)return t}return null}
+const fmtD=d=>d.toLocaleDateString("es-AR",{day:"numeric",month:"long"});
+function renderSky(){
+  const now=new Date();
+  document.getElementById("skyDate").textContent="Clima astral del "+now.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+  const sun=lon("Sun",now),moon=lon("Moon",now),ph=norm(moon-sun),illum=Math.round((1-Math.cos(ph*R))/2*100);
+  let pn,pt;
+  if(ph<22||ph>=338){pn="Luna nueva";pt="Momento de sembrar: pedidos, intenciones y comienzos."}
+  else if(ph<158){pn="Luna creciente";pt="Lo que empezaste toma fuerza. Ideal para abre caminos y prosperidad."}
+  else if(ph<202){pn="Luna llena";pt="Todo se ilumina y se intensifica. Gran momento para el tarot y cargar energía."}
+  else{pn="Luna menguante";pt="Tiempo de soltar y limpiar. Ideal para cortes y limpiezas."}
+  document.getElementById("moonName").textContent=pn+" en "+SIGNOS[Math.floor(moon/30)];
+  document.getElementById("moonText").textContent=pt+" Iluminada al "+illum+"%.";
+  // sombra de la luna (vista desde el hemisferio sur)
+  const sh=document.getElementById("shade"),f=Math.cos(ph*R); // 1 nueva, -1 llena
+  const waxing=ph<180; sh.style.opacity=illum>97?"0":".92";
+  sh.style.transform="translateX("+((waxing?1:-1)*(1-f)/2*100)+"%)";
+  const si=Math.floor(sun/30);
+  document.getElementById("seasonName").textContent="Temporada de "+SIGNOS[si];
+  document.getElementById("seasonText").textContent="El Sol en "+SIGNOS[si]+" trae "+TEMP[si];
+  // retrógrados
+  const rbox=document.getElementById("retros");rbox.textContent="";let any=false;
+  ["Mercury","Venus","Mars","Jupiter","Saturn"].forEach(n=>{
+    if(speed(n,now)<0){any=true;const st=stationDate(n,now),nm=PL.find(p=>p[0]===n)[1];
+      const el=document.createElement("div");el.className="retro";el.innerHTML='<span class="rx">R</span><div><b></b><span class="rt"></span></div>';
+      el.querySelector("b").textContent=nm+(n==="Venus"?" retrógrada en ":" retrógrado en ")+SIGNOS[Math.floor(lon(n,now)/30)]+(st?" hasta el "+fmtD(st):"");
+      el.querySelector(".rt").textContent=RETRO[n];rbox.appendChild(el)}});
+  if(!any){const el=document.createElement("div");el.className="retro calm";el.innerHTML='<span class="rx" style="color:var(--gold);border-color:var(--gold)">D</span><div><b>Todos los planetas avanzan</b><span>Sin retrógrados personales: buen momento para avanzar con decisiones.</span></div>';rbox.appendChild(el)}
+  // planetas
+  const pb=document.getElementById("planets");pb.textContent="";
+  PL.forEach(([k,nm,g])=>{const l=lon(k,now),r=k!=="Sun"&&k!=="Moon"&&speed(k,now)<0;
+    const el=document.createElement("div");el.className="pl"+(r?" r":"");el.innerHTML='<div class="g"></div><div class="n"></div><div class="s"></div><div class="d"></div>';
+    el.querySelector(".g").textContent=g+"︎";el.querySelector(".n").textContent=nm;el.querySelector(".s").textContent=SIGNOS[Math.floor(l/30)];el.querySelector(".d").textContent=Math.floor(l%30)+"°";pb.appendChild(el)});
+  // mensaje del mes
+  const hoy=now.toISOString().slice(0,10);
+  if(MENSAJE_DEL_MES.texto&&hoy<=MENSAJE_DEL_MES.hasta){document.getElementById("monthText").textContent=MENSAJE_DEL_MES.texto;document.getElementById("monthMsg").hidden=false}
+}
+try{renderSky()}catch(e){document.getElementById("moonText").textContent="Escribime y te cuento cómo está el cielo hoy."}
+
+/* ===== Horóscopo diario automático ===== */
+// Mensajes propios (opcional): fecha AAAA-MM-DD y el texto para el signo que quieras. Aparecen arriba del mensaje automático.
+const MIS_MENSAJES={
+  // "2026-10-20":{Aries:"Hoy Oshún te endulza el camino…", Libra:"…"},
+};
+const ZS=[
+ ["Aries","♈","21 mar – 19 abr"],["Tauro","♉","20 abr – 20 may"],["Géminis","♊","21 may – 20 jun"],["Cáncer","♋","21 jun – 22 jul"],
+ ["Leo","♌","23 jul – 22 ago"],["Virgo","♍","23 ago – 22 sep"],["Libra","♎","23 sep – 22 oct"],["Escorpio","♏","23 oct – 21 nov"],
+ ["Sagitario","♐","22 nov – 21 dic"],["Capricornio","♑","22 dic – 19 ene"],["Acuario","♒","20 ene – 18 feb"],["Piscis","♓","19 feb – 20 mar"]];
+// La Luna recorriendo cada casa contada desde tu signo (casa 1 = tu signo)
+const CASA=[
+ ["La Luna pasa por tu signo: estás más sensible y todo te toca de cerca. Hoy te toca ponerte primero.","La Luna en tu signo te pone en el centro. Escuchá lo que sentís y mostralo sin miedo."],
+ ["La Luna activa tu zona del dinero. Buen día para ordenar cuentas y pensar en lo que valés.","Hoy el foco está en lo material: cobrar, ahorrar, decidir en qué ponés tu energía y tu plata."],
+ ["La Luna mueve tu comunicación. Llamadas, mensajes y trámites se destraban.","Día de conversaciones: decí lo que tenés pendiente y prestá atención a lo que te cuentan."],
+ ["La Luna toca tu casa y tu familia. Necesitás refugio, raíces y tiempo con los tuyos.","Hoy lo emocional pasa por el hogar. Ordenar o limpiar tu espacio te va a hacer bien."],
+ ["La Luna enciende tu zona del amor y el disfrute. Permitite gozar, crear y seducir.","Día para el corazón: salidas, coqueteo, creatividad. Lo que hacés con alegría te sale mejor."],
+ ["La Luna pasa por tu casa del trabajo diario y la salud. Ordená la rutina y cuidá el cuerpo.","Hoy rinde lo práctico: resolver pendientes, organizarte y descansar bien."],
+ ["La Luna ilumina tu casa de la pareja y los socios. El otro te muestra algo de vos.","Día de vínculos: acuerdos, pareja, gente que se acerca. Buscá el equilibrio entre dar y recibir."],
+ ["La Luna baja a tu zona más profunda. Aparecen emociones intensas, secretos o temas de dinero compartido.","Hoy se mueve lo oculto. Buen día para soltar, cortar lo que pesa y transformarte."],
+ ["La Luna abre tu casa de los viajes, el estudio y la fe. Mirá más lejos de lo de siempre.","Día para expandirte: aprender, planear un viaje o confiar en algo más grande que vos."],
+ ["La Luna sube a lo más alto de tu cielo: carrera, metas y reconocimiento.","Hoy te ven. Mostrá tu trabajo y tomá decisiones sobre tu futuro profesional."],
+ ["La Luna activa tus amistades y proyectos. Lo grupal te da impulso.","Día para rodearte de los tuyos, pedir ayuda y pensar en lo que deseás a futuro."],
+ ["La Luna pasa por tu casa espiritual. El cuerpo pide pausa y el alma, silencio.","Hoy conviene bajar el ritmo, rezar, meditar y cerrar ciclos. Tus sueños traen mensajes."]];
+const RIT=[ // sugerencia ligada a los servicios, según la casa
+ ["Una carta natal te muestra cómo aprovechar este momento tuyo.","Carta natal"],
+ ["Una ofrenda para lo material ayuda a mover el dinero.","Ofrendas para lo material"],
+ ["Una tirada de tarot te aclara qué decir y a quién.","Tarot"],
+ ["Una limpieza energética del hogar renueva tu espacio.","Limpieza energética"],
+ ["Una tirada de amor te muestra qué viene en lo afectivo.","Tarot de amor"],
+ ["Un trabajo de cabeza te ordena la mente y te devuelve la calma.","Trabajo de cabeza"],
+ ["Una lectura de tarot sobre el vínculo te dice dónde estás parado.","Tarot de pareja"],
+ ["Si sentís que algo te pesa, un corte y una limpieza despejan.","Corte de brujería"],
+ ["Un abre caminos acompaña los proyectos que querés expandir.","Abre caminos"],
+ ["Tus tránsitos te dicen cuándo dar el paso en el trabajo.","Tránsitos"],
+ ["Un abre caminos ayuda a que tus proyectos se concreten.","Abre caminos"],
+ ["Una limpieza espiritual te ayuda a cerrar el ciclo liviano.","Limpieza energética"]];
+// Relación entre el signo de la Luna y tu signo (distancia en signos 0..6)
+const TONO={
+ 0:[4,"Día intenso","Emociones a flor de piel: lo que sentís hoy es una brújula."],
+ 1:[3,"Día de ajustes","Energía tranquila pero algo desacomodada. Andá paso a paso."],
+ 2:[4,"Día favorable","Las cosas fluyen si das el primer paso. Aprovechá las oportunidades chicas."],
+ 3:[2,"Día de cuidado","Puede haber roces o tensión. Respirá antes de reaccionar."],
+ 4:[5,"Día brillante","Todo fluye con facilidad. Es un gran día para pedir, empezar y animarte."],
+ 5:[3,"Día de ajustes","Algo no termina de encajar. Flexibilidad y paciencia."],
+ 6:[2,"Día de cuidado","Te tironean dos lados. Buscá el punto medio y no te enganches en discusiones."]};
+const DIA=[ // regente del día: domingo a sábado
+ ["Sol","dorado y amarillo","El domingo lo rige el Sol: hacé algo que te haga brillar y recargá energía."],
+ ["Luna","blanco y plateado","El lunes lo rige la Luna: escuchá tu intuición y cuidá tus emociones."],
+ ["Marte","rojo","El martes lo rige Marte: animate a lo que venís postergando, con valentía y sin pelear."],
+ ["Mercurio","amarillo y verde claro","El miércoles lo rige Mercurio: buen día para hablar, estudiar, negociar y hacer trámites."],
+ ["Júpiter","violeta y azul","El jueves lo rige Júpiter: pedí, expandite y confiá. Es día de abundancia."],
+ ["Venus","verde y rosa","El viernes lo rige Venus: dedicale tiempo al amor, a la belleza y a darte un gusto."],
+ ["Saturno","negro y marrón","El sábado lo rige Saturno: ordená, cerrá pendientes y poné límites sanos."]];
+const ENSIGNO={
+ Sun:["Es tu temporada: el Sol está en tu signo. Arranca tu año personal, ideal para tu revolución solar.",""],
+ Mercury:["Mercurio en tu signo: tu palabra pesa más. Buen momento para hablar, negociar y firmar.","Mercurio retrógrado en tu signo: revisá antes de decir o firmar. Vuelven temas pendientes."],
+ Venus:["Venus en tu signo: tu magnetismo está alto. Atraés amor, gente y oportunidades.","Venus retrógrada en tu signo: vuelven amores del pasado y revisás lo que de verdad valorás."],
+ Mars:["Marte en tu signo: tenés energía y empuje de sobra. Usalo para avanzar, no para pelear.","Marte retrógrado en tu signo: la energía va hacia adentro. No fuerces lo que no fluye."],
+ Jupiter:["Júpiter en tu signo: es tu año de expansión y suerte. Abrí puertas.","Júpiter retrógrado en tu signo: crecés por dentro. Revisá hacia dónde querés expandirte."],
+ Saturn:["Saturno en tu signo: tiempo de madurar y construir con paciencia. Lo que hagas ahora dura.","Saturno retrógrado en tu signo: revisá compromisos y reforzá las bases."]};
+
+const zod=document.getElementById("zod");let signoSel=null;
+function hoyLocal(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)}
+function claveFecha(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function horoscopo(i){
+  const d=hoyLocal(),dayN=Math.floor(d.getTime()/864e5),v=(dayN+i)%2;
+  const ms=Math.floor(lon("Moon",d)/30),casa=(ms-i+12)%12,dist=Math.min(casa,12-casa);
+  const [en,lab,tono]=TONO[dist],dia=DIA[d.getDay()];
+  const ph=norm(lon("Moon",d)-lon("Sun",d)),fase=ph<180?" Con la Luna creciendo, empujá lo que querés que crezca.":" Con la Luna menguando, aprovechá para soltar y limpiar.";
+  const plan=[];
+  ["Sun","Mercury","Venus","Mars","Jupiter","Saturn"].forEach(p=>{if(Math.floor(lon(p,d)/30)===i){const r=p!=="Sun"&&speed(p,d)<0;plan.push(ENSIGNO[p][r?1:0])}});
+  return {lead:CASA[casa][v],tono:tono+fase,en,lab,tip:dia[2],color:dia[1],plan,rit:RIT[casa],moon:SIGNOS[ms],d};
+}
+function showSign(i){
+  signoSel=i;try{localStorage.setItem("sa-signo",i)}catch(e){}
+  zod.querySelectorAll(".zb").forEach((b,j)=>b.setAttribute("aria-pressed",i===j));
+  const [n,g,f]=ZS[i],h=horoscopo(i),$h=id=>document.getElementById(id);
+  $h("hGlyph").textContent=vs(g);$h("hName").textContent=n;$h("hDates").textContent=f;
+  $h("hEnergy").innerHTML="";for(let k=0;k<5;k++){const s=document.createElement("i");s.textContent="✦";if(k<h.en)s.className="on";$h("hEnergy").appendChild(s)}
+  $h("hELabel").textContent=h.lab;
+  $h("hToday").textContent=h.d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"})+" · Luna en "+h.moon;
+  $h("hLead").textContent=h.lead;$h("hTone").textContent=h.tono;
+  $h("hPlanRow").hidden=!h.plan.length;$h("hPlan").textContent=h.plan.join(" ");
+  $h("hTip").textContent=h.tip;$h("hColor").textContent="Usá o llevá algo "+h.color+".";
+  $h("hRitual").textContent=h.rit[0];
+  const own=(MIS_MENSAJES[claveFecha(h.d)]||{})[n];$h("hOwn").hidden=!own;$h("hOwn").textContent=own?"Mensaje de Santiago: "+own:"";
+  const wa=$h("hWa");wa.dataset.msg="Hola Santiago, soy de "+n+" y leí mi horóscopo de hoy en tu página. Quiero consultar por: "+h.rit[1]+".";wire(wa.parentNode);
+  $h("hShare").href="https://wa.me/?text="+encodeURIComponent(n+" hoy: "+h.lead+" "+h.tip+"\n\nHoróscopo diario de Santeria Arcanoss · @santeriaarcanoss");
+}
+ZS.forEach(([n,g,f],i)=>{const b=document.createElement("button");b.type="button";b.className="zb";b.innerHTML='<span class="zg"></span><span></span><small></small>';
+  b.querySelector(".zg").textContent=vs(g);b.children[1].textContent=n;b.querySelector("small").textContent=f.split(" – ")[0];b.onclick=()=>showSign(i);zod.appendChild(b)});
+try{let s=null;try{s=localStorage.getItem("sa-signo")}catch(e){}
+  showSign(s!==null&&!isNaN(+s)?+s:Math.floor(lon("Sun",hoyLocal())/30))}
+catch(e){document.getElementById("hLead").textContent="Escribime y te cuento qué te trae el cielo hoy."}
+
+/* ===== Menú y atajos ===== */
+const MENU=[
+ ["#signos","☽","Tu signo hoy","Horóscopo diario"],
+ ["#carta","✦","Carta del día","Sacá tu carta de tarot"],
+ ["#cielo","☉","Cielo de hoy","Luna, planetas y retrógrados"],
+ ["#necesidad","♡","¿Qué necesitás?","Te digo qué trabajo te sirve"],
+ ["#servicios","★","Servicios","Todo lo que hago"],
+ ["#sobre-mi","♃","Sobre mí","Lo que dice mi carta"],
+ ["#reservar","✆","Reservar turno","En tres pasos"],
+ ["#preguntas","?","Preguntas","Dudas frecuentes"]];
+const menuBox=document.getElementById("menu"),menuBtn=document.getElementById("openMenu");
+document.querySelectorAll("[data-tiles]").forEach(box=>{
+  MENU.forEach(([h,i,t,sub])=>{const a=document.createElement("a");a.className="tile";a.href=h;a.innerHTML='<span class="ti" aria-hidden="true"></span><b></b><small></small>';
+    a.querySelector(".ti").textContent=vs(i);a.querySelector("b").textContent=t;a.querySelector("small").textContent=sub;box.appendChild(a)});
+});
+function abrirMenu(){menuBox.hidden=false;menuBtn.setAttribute("aria-expanded","true");menuBox.scrollTop=0}
+function cerrarMenu(){menuBox.hidden=true;menuBtn.setAttribute("aria-expanded","false")}
+function irA(hash){const el=document.querySelector(hash);if(!el)return;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const y=el.getBoundingClientRect().top+window.scrollY-84;
+  window.scrollTo({top:Math.max(0,y),behavior:reduce?"auto":"smooth"});
+  // respaldo por si la página está dentro de un visor que maneja su propio scroll
+  setTimeout(()=>{const r=el.getBoundingClientRect().top;if(Math.abs(r-84)>140)el.scrollIntoView({behavior:"auto",block:"start"})},reduce?50:900);
+}
+menuBtn.addEventListener("click",e=>{e.stopPropagation();menuBox.hidden?abrirMenu():cerrarMenu()});
+document.getElementById("closeMenu").onclick=cerrarMenu;
+document.addEventListener("click",e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a&&!a.classList.contains("wa")){const h=a.getAttribute("href");if(h.length>1){e.preventDefault();cerrarMenu();irA(h);return}}
+  if(!menuBox.hidden&&!menuBox.contains(e.target))cerrarMenu();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!menuBox.hidden){cerrarMenu();menuBtn.focus()}});
+// barra con borde al bajar + botón volver arriba
+const topBar=document.querySelector(".top"),toTop=document.getElementById("toTop");
+function onScroll(){const y=window.scrollY;topBar.classList.toggle("scrolled",y>10);toTop.classList.toggle("show",y>700)}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+toTop.onclick=()=>irA("#inicio");
+// marcar en el menú la sección donde está la persona
+const navLinks=[...document.querySelectorAll("#nav a")];
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const id="#"+en.target.id;navLinks.forEach(l=>l.classList.toggle("on",l.getAttribute("href")===id))}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["inicio","cielo","signos","sobre-mi","necesidad","servicios","reservar","preguntas"].forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el)});
+}
+
+wire(document);
+</script>
+
+</body>
+</html>
