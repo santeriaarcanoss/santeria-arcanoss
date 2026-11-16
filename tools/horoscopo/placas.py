@@ -136,7 +136,7 @@ def main(datos_path, salida):
                  "📲 Compartí la placa de tu signo en tu historia y etiquetame.", "💬 Comentá tu signo y contame si coincide.",
                  "El horóscopo de cada día está en santeriaarcanoss.com.ar",
                  "#horoscopo #horoscopodehoy #signos #astrologia #zodiaco"]
-        pub = {"fecha": dia["fecha"], "hora_local": "08:00", "zona": "America/Buenos_Aires",
+        pub = {"fecha": dia["fecha"], "hora_local": "12:00", "zona": "America/Buenos_Aires",
                "texto_html": "".join(f"<p>{t}</p>" for t in texto),
                "imagenes": [f"{SITIO}/horoscopo/{dia['fecha']}/{n}" for n in nombres]}
         json.dump(pub, open(os.path.join(carpeta, "publicacion.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

@@ -11,4 +11,4 @@ textos que muestra la página, y las deja publicadas en
 Si cambiás los textos del horóscopo en la página, las placas toman el cambio solas.
 
 Una tarea programada de Claude corre cada domingo: genera las placas del lunes y jueves
-siguientes, las sube acá, y las programa en Posty en @santiagojara.tarot a las 8:00.
+siguientes, las sube acá, y las programa en Posty en @santiagojara.tarot a las 12:00 (hora de más actividad de sus seguidores).
