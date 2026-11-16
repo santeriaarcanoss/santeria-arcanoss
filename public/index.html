@@ -76,6 +76,7 @@ a{color:inherit}
 .h-row p{color:var(--muted);font-size:15.5px}
 .h-row.hl p{color:var(--ink)}
 .h-own{border-left:3px solid var(--gold);padding-left:14px;font-family:var(--display);font-size:19px}
+.h-int{font-size:16.5px;line-height:1.6;color:var(--ink)}
 .h-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
 .h-cta .btn{padding:12px 20px;font-size:15px}
 @media (max-width:860px){.zod{grid-template-columns:repeat(4,1fr)}.horo{grid-template-columns:1fr;padding:22px}.h-id{border-right:0;border-bottom:1px solid var(--line);padding:0 0 18px}}
@@ -420,6 +421,8 @@ footer .legal{flex-basis:100%;font-size:12px;line-height:1.55;opacity:.85;border
       <div class="h-body">
         <p class="lead2" id="hLead"></p>
         <p class="h-own" id="hOwn" hidden></p>
+        <p class="h-int" id="hIntimo"></p>
+        <div class="h-row hl"><span class="k" id="hAlmaK">Porque sos</span><p id="hAlma"></p></div>
         <div class="h-row"><span class="k">Clima</span><p id="hTone"></p></div>
         <div class="h-row hl" id="hPlanRow" hidden><span class="k">En tu signo</span><p id="hPlan"></p></div>
         <div class="h-row"><span class="k">Consejo</span><p id="hTip"></p></div>
@@ -838,6 +841,94 @@ const ENSIGNO={
  Jupiter:["Júpiter en tu signo: es tu año de expansión y suerte. Abrí puertas.","Júpiter retrógrado en tu signo: crecés por dentro. Revisá hacia dónde querés expandirte."],
  Saturn:["Saturno en tu signo: tiempo de madurar y construir con paciencia. Lo que hagas ahora dura.","Saturno retrógrado en tu signo: revisá compromisos y reforzá las bases."]};
 
+// Texto íntimo según la casa que recorre la Luna (casa 1 = tu signo). Escenas cotidianas para que la gente se sienta identificada.
+const INTIMO=[
+ ["Hoy cualquier cosa te puede llegar más hondo de lo normal: una canción en el colectivo, un mensaje seco, un recuerdo que aparece de la nada. No es que estés mal, es que estás abierto. Date permiso de sentir sin dar explicaciones.",
+  "Puede que hoy te mires al espejo con otros ojos y te preguntes si sos la persona que querías ser. Esa pregunta no es para castigarte, es para volver a elegirte. Empezá por algo chiquito que sea solo para vos.",
+  "Hoy tenés menos paciencia para fingir que todo está bien. Si alguien te pregunta cómo estás, probá decir la verdad. Te va a sorprender quién se queda a escucharte."],
+ ["Capaz hoy abrís la app del banco, hacés cuentas mentales en la fila del súper y te agarra ese 'no me alcanza'. Respirá. Lo que valés no se mide en un saldo. Ordená un número a la vez.",
+  "Hoy aparece esa vocecita que te dice que no merecés darte un gusto. Fijate de dónde viene: muchas veces es algo que aprendiste en casa. Un pequeño gusto, sin culpa, también es cuidarte.",
+  "Día para preguntarte en qué estás gastando tu energía, no solo tu plata. Hay personas y hábitos que te cobran más de lo que te dan. Anotalo, aunque sea en las notas del celu."],
+ ["Hoy tenés en la cabeza un mensaje que no te animás a mandar. Lo escribís, lo borrás, te fijás si está en línea… Si sale del corazón, mandalo. Lo peor es quedarte con la duda.",
+  "Puede que hoy una charla corta, con un hermano, un vecino o alguien del laburo, te cambie el humor del día. Prestá atención a lo que te dicen sin querer: ahí hay una señal para vos.",
+  "Hoy la mente no para: mil pestañas abiertas, pendientes, audios sin escuchar. Elegí una sola cosa y terminala. Tu cabeza también necesita sentir que algo se cierra."],
+ ["Hoy te puede pegar la nostalgia: el olor de una comida de casa, una foto vieja, una charla que quedó pendiente. Llamá a esa persona. A veces sanar es simplemente volver a hablar.",
+  "Puede que hoy sientas que cargás con todos, que si vos no estás en tu casa nada funciona. Hoy está bien pedir ayuda. Cuidar a los demás no puede significar olvidarte de vos.",
+  "Hoy tu casa te pide mimo: abrir las ventanas, cambiar las sábanas, prender un sahumerio y sentarte en silencio. Cuando ordenás tu espacio, también se acomoda algo adentro."],
+ ["Hoy te dan ganas de que alguien te mire como antes, o de animarte a mirar a alguien así. Ponete eso que te queda lindo aunque no salgas. Sentirte deseable empieza por vos.",
+  "Puede que hoy te acuerdes de algo que te encantaba hacer de chico y que dejaste por falta de tiempo. Dibujar, bailar, cantar en la ducha: hacelo aunque sea un rato. Tu alegría también es una prioridad.",
+  "Hoy el corazón está más blando. Si alguien te gusta, no te hagas el desinteresado. Y si estás en pareja, sorprendé con algo simple: un mate, un mensaje, un abrazo largo."],
+ ["Hoy el cuerpo te habla: ese cansancio que arrastrás, la espalda contracturada, el sueño que no alcanza. No es flojera, es un aviso. Acostarte un rato antes también es amor propio.",
+  "Puede que hoy sientas que la lista de pendientes te come vivo. Escribila en un papel y tachá de a una. Ver avanzar tu día, aunque sea despacito, te devuelve la calma.",
+  "Hoy te sale ayudar a todos menos a vos. Comé a horario, tomá agua, salí a caminar diez minutos. Las cosas chiquitas que hacés por tu cuerpo son las que más se notan."],
+ ["Hoy alguien cercano te muestra algo tuyo que no querías ver: un enojo, una necesidad, un miedo. No te pelees con el espejo. Lo que te molesta del otro hoy trae una lección para vos.",
+  "Puede que hoy sientas que siempre sos vos el que escribe primero, el que se acuerda, el que da el paso. Está bien decirlo. Los vínculos sanos también se construyen poniendo palabras.",
+  "Hoy te dan ganas de compañía de verdad, no de cualquier compañía. Fijate con quién te sentís en paz y con quién te sentís en alerta. Esa diferencia lo dice todo."],
+ ["Hoy puede volver algo que creías superado: un nombre, un sueño, una sensación en el pecho. No lo tapes con ruido. Lo que sale a la superficie sale para irse.",
+  "Puede que hoy aparezcan celos, miedo a perder o ganas de controlarlo todo. Son emociones humanas, no te hacen mala persona. Escribí lo que sentís y quemá el papel: soltar también es un ritual.",
+  "Hoy se te despierta la intuición: sabés cosas que nadie te dijo. Confiá en esa corazonada, pero no actúes en caliente. Lo profundo pide tiempo."],
+ ["Hoy te dan ganas de agarrar la mochila e irte a cualquier lado. No hace falta un pasaje: cambiá el camino de siempre, entrá a un lugar nuevo, leé algo distinto. Tu alma pide aire.",
+  "Puede que hoy te preguntes para qué hacés todo lo que hacés. Esa pregunta no es crisis, es búsqueda. Volvé a eso que te hacía creer, aunque sea una oración chiquita antes de dormir.",
+  "Hoy una frase, un video o una persona te puede abrir la cabeza. Estate atento a las señales: el universo habla más de lo que creemos cuando soltamos el celu un rato."],
+ ["Hoy sentís la presión de demostrar: que podés, que sos suficiente, que no te equivocaste de camino. No tenés que convencer a nadie. Mostrá lo que hacés con orgullo y dejá que hable solo.",
+  "Puede que hoy te pregunten '¿y vos de qué laburás?' y te dé un poco de vergüenza la respuesta. Lo que hacés con dignidad vale. Y si soñás con otra cosa, hoy es buen día para dar el primer paso.",
+  "Hoy te miran más de lo que pensás: en el trabajo, tus clientes, tu familia. Cuidá cómo te mostrás, pero no te disfraces. Lo auténtico hoy suma más que lo perfecto."],
+ ["Hoy te puede caer la ficha de quiénes están de verdad: ese amigo que siempre responde, esa amiga que aparece sin que la llames. Decíselos. Un 'gracias por estar' hoy vale oro.",
+  "Puede que hoy te sientas un poco afuera del grupo, como si todos tuvieran planes menos vos. No es así. Escribile vos primero a alguien: a veces los demás también están esperando.",
+  "Hoy te dan ganas de soñar en grande: un proyecto, un viaje con amigos, un cambio de vida. Anotá ese deseo. Los sueños que se escriben empiezan a buscar su camino."],
+ ["Hoy capaz te sentís cansado sin motivo, con ganas de no ver a nadie. No es tristeza, es el alma pidiendo pausa. Apagá un rato las notificaciones y date ese silencio que necesitás.",
+  "Puede que hoy te venga a la mente alguien que ya no está. Prendé una vela, hablale, contale cómo estás. El amor no se termina, cambia de forma.",
+  "Hoy tus sueños vienen cargados de mensajes. Antes de agarrar el celu a la mañana, anotá lo que soñaste. Hay respuestas que solo aparecen cuando bajás la guardia."]];
+// "Porque sos…": rasgos de cada signo para que la gente diga "este soy yo" y lo comparta.
+const ALMA=[
+ ["Te enojás rápido y se te pasa más rápido todavía. Decís lo que pensás y después te preguntás si fue mucho. Fue justo.",
+  "Empezás todo con fuego. No es que no termines: tu energía necesita sentir que va hacia algo.",
+  "Por fuera parecés de hierro, pero cuando alguien te cuida de verdad te desarmás.",
+  "Odiás esperar y odiás perder. Pero cuando querés a alguien, lo defendés contra el mundo."],
+ ["Te cuesta soltar: personas, lugares, hasta la remera vieja. No es terquedad, es lealtad a lo que te hizo bien.",
+  "Un buen plato, una siesta y alguien que te abrace sin apuro: tu paraíso es simple y no pedís perdón por eso.",
+  "Aguantás mucho en silencio. Pero el día que decís 'basta', no hay vuelta atrás.",
+  "Tardás en confiar, pero cuando confiás, estás para siempre."],
+ ["Tenés el celu lleno de audios sin escuchar y la cabeza llena de ideas a la vez. No sos disperso: sos curioso de todo.",
+  "Hacés reír a todos, pero pocos saben que de noche le das mil vueltas a todo.",
+  "Te aburre la rutina y te salva una buena charla. Con vos se puede hablar de cualquier cosa, y eso es un regalo.",
+  "Cambiás de opinión porque escuchás, no porque no tengas criterio. Crecer también es eso."],
+ ["Te acordás de todo: lo que te dijeron, cómo te lo dijeron y la cara que pusieron. Tu memoria es tu corazón.",
+  "Cuidás a todos como si fueran tu familia. A veces solo necesitás que alguien te pregunte cómo estás vos.",
+  "Te hacés el fuerte, pero lloraste con una publicidad. Sentir tanto no es debilidad, es tu superpoder.",
+  "Tu casa es tu templo. Si no te sentís cómodo en un lugar, ya estás pensando en volver a la tuya."],
+ ["Te gusta que te miren, pero más te gusta que te valoren. Un 'te admiro' te arregla la semana.",
+  "Das todo por los que querés, y te duele cuando no te devuelven ni la mitad.",
+  "Tenés orgullo, sí. Pero detrás hay un corazón enorme que no quiere que lo lastimen.",
+  "Llegás a un lugar y se nota. No es soberbia: es luz. No la apagues para que otros se sientan cómodos."],
+ ["Ves el detalle que nadie ve. Lo que te falta ver es lo bien que hacés las cosas.",
+  "Te exigís como nadie te exigiría. Hoy probá tratarte como tratás a la gente que querés.",
+  "Ordenás el caos de los demás sin que te lo pidan. Pero tu cabeza también necesita que alguien la cuide.",
+  "Hacés listas para calmar la ansiedad, y funciona. Anotá también lo que te hace feliz."],
+ ["Tardás media hora en elegir qué pedir, pero para elegir a la gente tenés ojo de lince.",
+  "No soportás las peleas y a veces cedés de más para que haya paz. Tu paz también cuenta.",
+  "Te enamorás de la belleza: un lugar, una voz, una forma de mirar. No hay nada de superficial en eso.",
+  "Siempre entendés las dos campanas. A veces te falta escuchar la tuya."],
+ ["Sabés cuando alguien te miente antes de que termine la frase. No es paranoia: es intuición afilada.",
+  "Pocos te conocen de verdad, y está bien. Tu mundo interno no es para cualquiera.",
+  "Cuando amás, amás con todo. Y cuando te traicionan, no te olvidás. Perdonar no es olvidar.",
+  "Te transformaste tantas veces que ya no te asusta empezar de cero. Eso es poder."],
+ ["Necesitás aire, libertad y algo que te ilusione. Si te encierran, te apagás.",
+  "Decís las verdades sin filtro y a veces duelen. Pero nadie puede decir que sos falso.",
+  "Siempre tenés un plan nuevo o un viaje en la cabeza. Tu fe en que todo puede mejorar contagia.",
+  "Te reís de todo, hasta de lo que te duele. Es tu manera de seguir adelante."],
+ ["Parecés frío, pero sos de los que más se preocupan. Lo demostrás haciendo, no diciendo.",
+  "Cargás responsabilidades desde chico. Está bien soltar la mochila aunque sea un rato.",
+  "Tus metas son serias y tu paciencia, enorme. Lo que construís, dura.",
+  "Te cuesta pedir ayuda porque siempre te arreglaste solo. Dejar que te cuiden también es crecer."],
+ ["Sos el raro del grupo y lo sabés. Gracias a vos, los demás se animan a ser ellos mismos.",
+  "Te importa el mundo entero, pero te cuesta decir 'te extraño'. Igual se te nota.",
+  "Necesitás tu espacio como el aire. No es que no quieras: te querés libre.",
+  "Pensás distinto y vas adelantado. Lo que hoy no entienden, mañana lo copian."],
+ ["Sentís lo que siente el otro antes de que hable. Por eso necesitás ratos a solas para recargarte.",
+  "Soñás despierto, te emocionás con una canción y creés en las señales. El mundo necesita más gente así.",
+  "Das segundas, terceras y cuartas oportunidades. Tu bondad es enorme: cuidala.",
+  "Tenés un mundo interior que nadie imagina. Tu intuición casi nunca falla: hacele caso."]];
 const zod=document.getElementById("zod");let signoSel=null;
 function hoyLocal(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)}
 function claveFecha(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -848,7 +939,7 @@ function horoscopo(i){
   const ph=norm(lon("Moon",d)-lon("Sun",d)),fase=ph<180?" Con la Luna creciendo, empujá lo que querés que crezca.":" Con la Luna menguando, aprovechá para soltar y limpiar.";
   const plan=[];
   ["Sun","Mercury","Venus","Mars","Jupiter","Saturn"].forEach(p=>{if(Math.floor(lon(p,d)/30)===i){const r=p!=="Sun"&&speed(p,d)<0;plan.push(ENSIGNO[p][r?1:0])}});
-  return {lead:CASA[casa][v],tono:tono+fase,en,lab,tip:dia[2],color:dia[1],plan,rit:RIT[casa],moon:SIGNOS[ms],d};
+  return {lead:CASA[casa][v],intimo:INTIMO[casa][(dayN+i)%3],alma:ALMA[i][(dayN+i*3)%4],tono:tono+fase,en,lab,tip:dia[2],color:dia[1],plan,rit:RIT[casa],moon:SIGNOS[ms],d};
 }
 function showSign(i){
   signoSel=i;try{localStorage.setItem("sa-signo",i)}catch(e){}
@@ -858,13 +949,13 @@ function showSign(i){
   $h("hEnergy").innerHTML="";for(let k=0;k<5;k++){const s=document.createElement("i");s.textContent="✦";if(k<h.en)s.className="on";$h("hEnergy").appendChild(s)}
   $h("hELabel").textContent=h.lab;
   $h("hToday").textContent=h.d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"})+" · Luna en "+h.moon;
-  $h("hLead").textContent=h.lead;$h("hTone").textContent=h.tono;
+  $h("hLead").textContent=h.lead;$h("hIntimo").textContent=h.intimo;$h("hAlmaK").textContent="Porque sos "+n;$h("hAlma").textContent=h.alma;$h("hTone").textContent=h.tono;
   $h("hPlanRow").hidden=!h.plan.length;$h("hPlan").textContent=h.plan.join(" ");
   $h("hTip").textContent=h.tip;$h("hColor").textContent="Usá o llevá algo "+h.color+".";
   $h("hRitual").textContent=h.rit[0];
   const own=(MIS_MENSAJES[claveFecha(h.d)]||{})[n];$h("hOwn").hidden=!own;$h("hOwn").textContent=own?"Mensaje de Santiago: "+own:"";
   const wa=$h("hWa");wa.dataset.msg="Hola Santiago, soy de "+n+" y leí mi horóscopo de hoy en tu página. Quiero consultar por: "+h.rit[1]+".";wire(wa.parentNode);
-  $h("hShare").href="https://wa.me/?text="+encodeURIComponent("✦ "+n+" hoy: "+h.lead+" "+h.tip+"\n\nMirá el horóscopo de tu signo en "+SITIO);
+  $h("hShare").href="https://wa.me/?text="+encodeURIComponent("✦ "+n+" hoy: "+h.lead+"\n\nPorque soy "+n+": "+h.alma+"\n\nMirá el horóscopo de tu signo en "+SITIO);
   $h("hNote").textContent="";
   $h("hStory").onclick=()=>compartirImagen(()=>imagenSigno(n,g,f,h),"horoscopo-"+n.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")+".png","Horóscopo de "+n,n+" hoy: "+h.lead+" Mirá el de tu signo en "+SITIO,$h("hNote"));
 }

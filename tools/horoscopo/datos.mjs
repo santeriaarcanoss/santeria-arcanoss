@@ -38,7 +38,7 @@ const extraer = (fechas) => fechas.map(f => {
   const signos = ZS.map((z, i) => {
     const h = horoscopo(i);
     return { nombre: z[0], glifo: z[1], fechas: z[2], lead: h.lead, tono: h.tono, energia: h.en, etiqueta: h.lab,
-             plan: h.plan, tip: h.tip, color: h.color, luna: h.moon };
+             plan: h.plan, intimo: h.intimo, alma: h.alma, tip: h.tip, color: h.color, luna: h.moon };
   });
   return { fecha: f, luna: signos[0].luna, tip: signos[0].tip, color: signos[0].color, signos };
 });

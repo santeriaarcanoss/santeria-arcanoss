@@ -84,30 +84,31 @@ def tapa(dia, seed, path):
     d.text((W // 2, H - 230 * S), "Buscá tu signo  →", font=F("bm", 30), fill=GOLD, anchor="ma"); pie(d); guardar(im, path)
 
 def signo(dia, s, seed, path):
-    im, d = fondo(seed); volanta(d, dia["titulo"].upper(), 120 * S)
-    cx, cy, r = W // 2, 300 * S, 105 * S
+    im, d = fondo(seed); volanta(d, dia["titulo"].upper(), 92 * S)
+    cx, cy, r = W // 2, 222 * S, 80 * S
     d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=GOLD, width=3 * S)
-    d.ellipse([cx - r - 16 * S, cy - r - 16 * S, cx + r + 16 * S, cy + r + 16 * S], outline=(110, 90, 60), width=S)
-    d.text((cx, cy + 4 * S), s["glifo"] + "︎", font=F("g", 120), fill=GOLD, anchor="mm")
-    d.text((cx, 470 * S), s["nombre"], font=F("t", 92), fill=CREAM, anchor="ma")
-    d.text((cx, 580 * S), s["fechas"], font=F("b", 30), fill=DIM, anchor="ma")
-    st = F("g", 40); step = 62 * S
-    for q in range(5): d.text((cx - step * 2 + q * step, 660 * S), "✦", font=st, fill=GOLD if q < s["energia"] else (86, 70, 60), anchor="mm")
-    d.text((cx, 700 * S), s["etiqueta"].upper(), font=F("bs", 24), fill=GOLD, anchor="ma")
-    tono = s["tono"]
-    for f in FASES: tono = tono.replace(f, "")
-    plan = " ".join(s["plan"])
-    for k in (1.0, .94, .88, .82, .76):  # achica si no entra
-        y = bloque(d, s["lead"], F("ti", 43 * k), 760 * S, CREAM, maxw=W - 230 * S, lh=1.28, dibujar=False)
-        y = bloque(d, tono, F("b", 32 * k), y + 22 * S, SOFT, maxw=W - 260 * S, lh=1.35, dibujar=False)
-        if plan: y = bloque(d, plan, F("b", 28 * k), y + 40 * S, GOLD, maxw=W - 280 * S, lh=1.35, dibujar=False)
-        if y < H - 190 * S: break
-    y = bloque(d, s["lead"], F("ti", 43 * k), 760 * S, CREAM, maxw=W - 230 * S, lh=1.28)
-    y = bloque(d, tono, F("b", 32 * k), y + 22 * S, SOFT, maxw=W - 260 * S, lh=1.35)
-    if plan:
-        d.line([(W // 2 - 60 * S, y + 22 * S), (W // 2 + 60 * S, y + 22 * S)], fill=(140, 112, 66), width=S)
-        bloque(d, plan, F("b", 28 * k), y + 40 * S, GOLD, maxw=W - 280 * S, lh=1.35)
-    pie(d, "Compartilo en tu historia y etiquetame"); guardar(im, path)
+    d.ellipse([cx - r - 13 * S, cy - r - 13 * S, cx + r + 13 * S, cy + r + 13 * S], outline=(110, 90, 60), width=S)
+    d.text((cx, cy + 3 * S), s["glifo"] + "\ufe0e", font=F("g", 92), fill=GOLD, anchor="mm")
+    d.text((cx, 330 * S), s["nombre"], font=F("t", 80), fill=CREAM, anchor="ma")
+    d.text((cx, 426 * S), s["fechas"], font=F("b", 27), fill=DIM, anchor="ma")
+    st = F("g", 34); step = 54 * S
+    for q in range(5): d.text((cx - step * 2 + q * step, 486 * S), "✦", font=st, fill=GOLD if q < s["energia"] else (86, 70, 60), anchor="mm")
+    d.text((cx, 516 * S), s["etiqueta"].upper(), font=F("bs", 22), fill=GOLD, anchor="ma")
+    plan = " ".join(s["plan"]); etiq = ("PORQUE SOS " + s["nombre"]).upper()
+    def dibujar(k, ok):
+        y = bloque(d, s["lead"], F("ti", 38 * k), 572 * S, CREAM, maxw=W - 220 * S, lh=1.26, dibujar=ok)
+        y = bloque(d, s["intimo"], F("b", 29 * k), y + 20 * S, SOFT, maxw=W - 230 * S, lh=1.42, dibujar=ok)
+        y += 30 * S
+        if ok: d.line([(W // 2 - 60 * S, y), (W // 2 + 60 * S, y)], fill=(140, 112, 66), width=S)
+        y += 22 * S
+        if ok: d.text((W // 2, y), etiq, font=F("bs", 21 * k), fill=GOLD, anchor="ma")
+        y = bloque(d, s["alma"], F("ti", 31 * k), y + 36 * S * k, CREAM, maxw=W - 250 * S, lh=1.3, dibujar=ok)
+        if plan: y = bloque(d, plan, F("b", 25 * k), y + 22 * S, GOLD, maxw=W - 270 * S, lh=1.34, dibujar=ok)
+        return y
+    for k in (1.0, .95, .9, .85, .8, .75, .7):  # achica si no entra
+        if dibujar(k, False) < H - 196 * S: break
+    dibujar(k, True)
+    pie(d, "¿Te sentiste identificado? Compartilo y etiquetame"); guardar(im, path)
 
 def cierre(seed, path):
     im, d = fondo(seed); fases(d, 250 * S)
@@ -131,7 +132,7 @@ def main(datos_path, salida):
             n = f"{i + 2:02d}-{slug(s['nombre'])}.jpg"; nombres.append(n); signo(dia, s, seed + i + 1, os.path.join(carpeta, n))
         nombres.append("14-cierre.jpg"); cierre(seed + 20, os.path.join(carpeta, nombres[-1]))
         texto = [f"Horóscopo del {dia['titulo'][0].lower() + dia['titulo'][1:]} ✨ Luna en {dia['luna']}", dia["tip"],
-                 "Deslizá hasta tu signo y fijate cómo viene tu día. Si tenés ascendente, leé también ese.",
+                 "Deslizá hasta tu signo y fijate cómo viene tu día. Si tenés ascendente, leé también ese.", "¿Te sentiste identificado? Mandásela a esa persona de tu signo que tiene que leerla. 💌",
                  "📲 Compartí la placa de tu signo en tu historia y etiquetame.", "💬 Comentá tu signo y contame si coincide.",
                  "El horóscopo de cada día está en santeriaarcanoss.com.ar",
                  "#horoscopo #horoscopodehoy #signos #astrologia #zodiaco"]
